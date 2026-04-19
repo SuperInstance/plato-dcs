@@ -36,6 +36,47 @@ pub const DCS_FLEET_RATIO: f64 = 21.87;
 /// fleet_score = avg_specialist_score × SYNTHESIS_BONUS = 5.88 × 3.72… = 21.87
 pub const SYNTHESIS_BONUS: f64 = DCS_FLEET_RATIO / SPECIALIST_RATIO;
 
+// ─── Constraint Theory Constants (from constraint-theory-core/src/dcs.rs) ─────
+
+/// Minimum neighbors per agent for rigid connectivity (Laman's theorem).
+pub const LAMAN_NEIGHBOR_THRESHOLD: usize = 12;
+
+/// Information bits per Pythagorean manifold (log2(48)).
+pub const PYTHAGOREAN_INFO_BITS: f64 = 5.584962500721156;
+
+/// Ricci curvature convergence multiplier for swarm coordination.
+pub const RICCI_CONVERGENCE_MULTIPLIER: f64 = 1.692;
+
+/// Swarm size threshold above which uniform rules apply.
+pub const SWARM_UNIFORMITY_THRESHOLD: usize = 500;
+
+/// Coordination entry window (latency multiplier).
+pub const COORDINATION_ENTRY_WINDOW: f64 = 1.7;
+
+/// Check if agents form a rigidly connected graph (Laman's theorem).
+pub fn is_rigidly_connected(agents: usize, avg_neighbors: usize) -> bool {
+    if agents <= 1 { return true; }
+    avg_neighbors >= LAMAN_NEIGHBOR_THRESHOLD
+}
+
+/// Exact information capacity of Pythagorean manifold.
+pub fn info_capacity_exact() -> f64 { PYTHAGOREAN_INFO_BITS }
+
+/// Estimated convergence time given average latency.
+pub fn convergence_time(avg_latency_ms: f64) -> f64 {
+    avg_latency_ms * RICCI_CONVERGENCE_MULTIPLIER
+}
+
+/// Whether swarm should use uniform rules.
+pub fn should_use_uniform_rules(agent_count: usize) -> bool {
+    agent_count >= SWARM_UNIFORMITY_THRESHOLD
+}
+
+/// Whether elapsed time permits coordination entry.
+pub fn can_enter_coordination(elapsed_ms: f64, avg_latency_ms: f64) -> bool {
+    elapsed_ms >= avg_latency_ms * COORDINATION_ENTRY_WINDOW
+}
+
 // ─── Domain ──────────────────────────────────────────────────────────────────
 
 /// Problem/agent domain tags.
@@ -949,5 +990,49 @@ mod tests {
             "Expected ≥7 log entries, got {}",
             result.cycle_log.len()
         );
+    }
+
+    // ─── Constraint Theory Constants Tests ────────────────────────────────────
+
+    #[test]
+    fn test_laman_threshold() {
+        assert_eq!(LAMAN_NEIGHBOR_THRESHOLD, 12);
+    }
+
+    #[test]
+    fn test_pythagorean_info_bits() {
+        // log2(48) = 5.584962500721156...
+        assert!((PYTHAGOREAN_INFO_BITS - 5.585).abs() < 0.001);
+    }
+
+    #[test]
+    fn test_ricci_multiplier() {
+        assert!((RICCI_CONVERGENCE_MULTIPLIER - 1.692).abs() < 0.001);
+    }
+
+    #[test]
+    fn test_is_rigidly_connected() {
+        assert!(is_rigidly_connected(1, 0)); // 1 agent always connected
+        assert!(is_rigidly_connected(20, 15)); // 15 >= 12
+        assert!(!is_rigidly_connected(20, 5)); // 5 < 12
+    }
+
+    #[test]
+    fn test_convergence_time() {
+        let t = convergence_time(100.0);
+        assert!((t - 169.2).abs() < 0.1);
+    }
+
+    #[test]
+    fn test_should_use_uniform_rules() {
+        assert!(should_use_uniform_rules(500));
+        assert!(should_use_uniform_rules(1000));
+        assert!(!should_use_uniform_rules(100));
+    }
+
+    #[test]
+    fn test_can_enter_coordination() {
+        assert!(can_enter_coordination(200.0, 100.0)); // 200 >= 170
+        assert!(!can_enter_coordination(100.0, 100.0)); // 100 < 170
     }
 }
