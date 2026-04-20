@@ -1,0 +1,8 @@
+README.md
+pyproject.toml
+src/plato_dcs/__init__.py
+src/plato_dcs/dcs.py
+src/plato_dcs.egg-info/PKG-INFO
+src/plato_dcs.egg-info/SOURCES.txt
+src/plato_dcs.egg-info/dependency_links.txt
+src/plato_dcs.egg-info/top_level.txt

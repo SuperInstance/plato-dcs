@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: plato-dcs
+Version: 0.1.0
+Summary: Dynamic Consensus System — multi-agent belief, lock accumulation, consensus
+License: MIT
+Requires-Python: >=3.8
