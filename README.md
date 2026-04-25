@@ -1,22 +1,33 @@
 # plato-dcs
 
-**Divide-Conquer-Synthesize** execution engine. 7-phase protocol for fleet task decomposition.
+Dynamic Consensus System — multi-agent belief, lock accumulation, consensus.
 
-Proven ratios from fleet research:
-- **5.88×** specialist advantage (single specialist vs generalist)
-- **21.87×** fleet advantage (DCS fleet vs single generalist)
+When agents disagree, how do they reach consensus? Plato DCS implements a dynamic consensus system where agents accumulate locks on beliefs until a threshold is reached.
 
-## Why
+## How It Works
 
-One agent can't be good at everything. DCS decomposes a task into specialist subtasks, conquers each independently, then synthesizes results. The synthesis multiplier (3.72×) emerges from combining specialist outputs.
+1. **Propose** — An agent proposes a belief
+2. **Accumulate** — Other agents lock their agreement
+3. **Threshold** — When enough agents agree, the belief is accepted
+4. **Dynamic** — Thresholds adjust based on confidence and agent expertise
 
-## Usage
+## What It Does
 
-```rust
-use plato_dcs::DcsEngine;
+- **Multi-agent belief tracking** — Each agent's beliefs are recorded
+- **Lock accumulation** — Agreement is collected, not voted
+- **Dynamic thresholds** — Consensus requirements adjust based on stakes
+- **Conflict resolution** — When agents disagree, evidence wins
 
-let engine = DcsEngine::new(specialist_registry);
-let result = engine.execute("analyze fleet health").unwrap();
+## Installation
+
+```bash
+pip install plato-dcs
 ```
 
-Zero dependencies. `cargo add plato-dcs`
+## Part of the Cocapn Fleet
+
+Enables democratic decision-making across the fleet without a central authority.
+
+## License
+
+MIT
