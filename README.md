@@ -1,5 +1,8 @@
 # plato-dcs
 
+[![crates.io](https://img.shields.io/crates/v/plato-dcs)](https://crates.io/crates/plato-dcs) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 Dynamic Consensus System — multi-agent belief, lock accumulation, consensus.
 
 When agents disagree, how do they reach consensus? Plato DCS implements a dynamic consensus system where agents accumulate locks on beliefs until a threshold is reached.
