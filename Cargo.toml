@@ -1,6 +1,6 @@
 [package]
 name = "plato-dcs"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "DCS execution engine — Divide-Conquer-Synthesize protocol, 5.88× specialist, 21.87× generalist"
 license = "MIT"
