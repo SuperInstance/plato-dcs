@@ -5,6 +5,7 @@ edition = "2021"
 description = "DCS execution engine — Divide-Conquer-Synthesize protocol, 5.88× specialist, 21.87× generalist"
 license = "MIT"
 repository = "https://github.com/SuperInstance/plato-dcs"
+exclude = ["target/", "data/", ".git/", "*.lock"]
 
 [lib]
 name = "plato_dcs"
